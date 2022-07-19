@@ -1,0 +1,37 @@
+<?php
+return [
+    'labels'  => [
+        'Order' => '订单',
+        'order' => '订单',
+    ],
+    'fields'  => [
+        'channel'                    => '渠道',
+        'order_id'                   => '订单号',
+        'user_name'                  => '客户名字',
+        'user_id_num'                => '身份证号',
+        'user_phone'                 => '手机号',
+        'combo'                      => '套餐',
+        'schedule_seat_type'         => '期望舱位',
+        'seat_type'                  => '出行舱位',
+        'seat_no'                    => '座位编号',
+        'fight_no'                   => '航班编号',
+        'schedule_date'              => '期望日期',
+        'confirm_date'               => '出行日期',
+        'price'                      => '产品价格',
+        'cost'                       => '成本',
+        'compensation'               => '补差费用',
+        'schedule_time'              => '期望时间',
+        'confirm_time'               => '出行时间',
+        'operator_nickname'          => '分配购票账号',
+        'operator_user_name'         => '分配购票人',
+        'confirm_operator_nickname'  => '实际购票账号',
+        'confirm_operator_user_name' => '实际购票人',
+        'remark'                     => '备注',
+        'result_remark'              => '订单备注',
+        'status'                     => '出票状态',
+        'trade_no'                   => '平台交易ID',
+        'message_notify_status'      => '短信通知状态',
+    ],
+    'options' => [
+    ],
+];
