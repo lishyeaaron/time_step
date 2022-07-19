@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Admin\Controllers;
+use App\Models\Combo;
+use App\Models\Operator;
 use thiagoalessio\TesseractOCR\TesseractOCR;
 use App\Admin\Renderable\PostTable;
 use App\Admin\Repositories\NullRepository;
@@ -34,12 +36,43 @@ class TicketController extends AdminController
             ->body($this->newline())
             ->body($this->form());
     }
+    protected $combos = [];
+    protected $operators = [];
 
+    protected function combos()
+    {
+        if (empty($this->combos)) {
+            $newArr = [];
+            $res    = array_values(Combo::all()->pluck('combo')->toArray());
+            foreach ($res as $k => $v) {
+                $newArr[$v] = $v;
+            }
+            $this->combos = $newArr;
+            return $this->combos;
+        } else {
+            return $this->combos;
+        }
+    }
+
+    protected function operators()
+    {
+        if (empty($this->operators)) {
+            $newArr = [];
+            $res    = array_values(Operator::all()->pluck('name')->toArray());
+            foreach ($res as $k => $v) {
+                $newArr[$v] = $v;
+            }
+            $this->operators = $newArr;
+            return $this->operators;
+        } else {
+            return $this->operators;
+        }
+    }
     protected function grid()
     {
 
         return Grid::make(new Ticket(), function (Grid $grid) {
-            $grid->tools(new Image());
+//            $grid->tools(new Image());
 
             #$grid->model()->where('is_del',0);
             $grid->quickSearch(['trade_no', 'user_id_num','user_name', 'user_phone','operator_user_name','confirm_operator_user_name'
@@ -47,6 +80,8 @@ class TicketController extends AdminController
             $grid
                 ->tableCollapse(false);
             $grid->showColumnSelector();
+            $grid->disableCreateButton();
+            $grid->disableDeleteButton();
             $grid->selector(function (Grid\Tools\Selector $selector) {
                 $selector->select('schedule_seat_type', '舱位', AppConst::$SEAT_TYPE);
                 $selector->select('status', '状态', AppConst::$STATUS);
@@ -80,7 +115,7 @@ $this->user_name $this->user_phone
 
             #$grid->column('id')->sortable();
 //            $grid->column('trade_no', '订单号')->filter(Grid\Column\Filter\Like::make())->width('50px');;;
-//            $grid->column('combo')->filter(Grid\Column\Filter\Like::make());
+            $grid->column('combo')->filter(Grid\Column\Filter\In::make($this->combos()));
 //            #$grid->column('channel');
 //            $grid->column('user_name')->copyable()->filter(Grid\Column\Filter\Like::make());
 //            $grid->column('user_id_num')->copyable()->filter(Grid\Column\Filter\Like::make());
@@ -137,7 +172,7 @@ $this->user_name $this->user_phone
             $grid->column('fight_no')->editable();
 
 
-            $grid->column('operator_user_name')->editable();
+            $grid->column('operator_user_name')->select($this->operators());
             #$grid->column('operator_id');
             #$grid->column('confirm_operator_nickname');
             $grid->column('confirm_operator_user_name')->editable();
@@ -268,7 +303,7 @@ $this->user_name $this->user_phone
 
                 $form->next(function (Form\BlockForm $form) {
                     $form->title('套餐信息');
-                    $form->text('trade_no', '订单ID');
+                    $form->text('trade_no', '订单ID')->disable();
                     $form->select('channel', '渠道')->options(AppConst::$CHANNEL);
                     $form->date('schedule_date', '期望日期');
                     $form->time('schedule_time', '期望时间');

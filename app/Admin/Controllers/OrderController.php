@@ -150,7 +150,7 @@ class OrderController extends AdminController
 
                 $form->table('users', '游客', function ($table) {
                     $table->text('user_name');
-                    $table->text('user_phone');
+                    #$table->text('user_phone');
                     $table->text('user_id_num');
                     $table->select('operator_user_name')->options($this->operators());
 
